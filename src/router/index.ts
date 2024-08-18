@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+// import { useQuizStore } from '@/stores/quiz';
 import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
@@ -12,14 +13,23 @@ const router = createRouter({
     {
       path: '/quiz',
       name: 'quiz',
-      component: () => import('../views/QuizView.vue')
+      component: () => import('../views/QuizView.vue'),
     },
     {
       path: '/summary',
       name: 'summary',
-      component: () => import('../views/SummaryView.vue')
+      component: () => import('../views/SummaryView.vue'),
+      meta: { requiresData: true }
     }
   ]
+})
+
+
+router.beforeEach(async (to, from, next) => {
+  // const quizStore = useQuizStore();
+  // if (to.meta.requiresData) {
+  //   next({ name: 'home'})
+    next()
 })
 
 export default router
