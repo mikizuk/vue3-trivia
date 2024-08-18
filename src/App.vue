@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
@@ -8,13 +9,15 @@
     <div class="header__nav">
       <h1 class="header__title">Trivia Quiz Game</h1>
       <nav>
-        Hello World
+        <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/quiz">Quiz</RouterLink>
+        <RouterLink to="/summary">Summary</RouterLink>
       </nav>
     </div>
   </header>
 
   <main>
-    Hello World
+    <RouterView />
   </main>
 </template>
 
