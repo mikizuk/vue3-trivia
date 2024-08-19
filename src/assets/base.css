@@ -36,6 +36,8 @@
 
   --color-accent: var(--vt-c-greenish);
   --color-progress-bar: var(--vt-c-greenish);
+  --color-selected-border: var(--vt-c-indigo);
+  --color-selected-color: var(--vt-c-indigo);
 
   --section-gap: 160px;
 }

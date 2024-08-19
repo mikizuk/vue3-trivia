@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, computed } from "vue";
 import { categories, difficulties, types, encodes } from "@/config/opentdb";
-import type { QuizSetup } from "@/types/types";
+import type { ApiSetup } from "@/types/types";
 import { MAX_QUESTIONS, MIN_QUESTIONS } from "@/service/triviaApi";
 import { storeToRefs } from 'pinia'
 import { useQuizStore } from '@/stores/quiz';
@@ -10,7 +10,7 @@ const quizStore = useQuizStore()
 const { quizSetup } = storeToRefs(quizStore)
 const emit = defineEmits(["createQuiz"])
 
-const qSetup: QuizSetup = reactive(quizSetup.value)
+const qSetup: ApiSetup = reactive(quizSetup.value)
 const isButtonDisabled = computed(() => {
   return qSetup.numberOfQuestions > MAX_QUESTIONS || qSetup.numberOfQuestions < MIN_QUESTIONS;
 });
@@ -18,7 +18,7 @@ const isButtonDisabled = computed(() => {
 
 <template>
   <form @submit.prevent="emit('createQuiz', qSetup)" class="quiz-creator">
-    <h3>Please select first quiz:</h3>
+    <h2>Please create you quiz:</h2>
     <div class="form-grid">
       <label class="form-label" for="form-questions">Number of questions:*</label>
       <input class="form-input" name="form-questions" id="form-questions" v-model.number="qSetup.numberOfQuestions"

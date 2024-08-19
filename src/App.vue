@@ -23,6 +23,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <style scoped>
 header {
+  padding: 1rem;
   line-height: 1.5;
   max-height: 100vh;
 }

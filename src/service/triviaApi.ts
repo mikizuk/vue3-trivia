@@ -1,4 +1,4 @@
-import type { QuizSetup, QuizResponse } from "@/types/types";
+import type { ApiSetup, ApiResponse } from "@/types/types";
 import { convertKeysToCamelCase } from "@/utils/object";
 
 enum ReponseEnum {
@@ -18,20 +18,20 @@ interface TriviaResponse {
 export const MIN_QUESTIONS = 1;
 export const MAX_QUESTIONS = 50;
 
-export async function fetchQuestions(qSetup: QuizSetup): Promise<QuizResponse> {
+export async function fetchQuestions(quizSetup: ApiSetup): Promise<ApiResponse> {
   const BASE_URL = `https://opentdb.com/api.php`;
 
   const params = new URLSearchParams({
-    amount: qSetup.numberOfQuestions.toString(),
+    amount: quizSetup.numberOfQuestions.toString(),
   })
-  if (qSetup.selectedCategoryValue) {
-    params.set('category', qSetup.selectedCategoryValue.toString())
+  if (quizSetup.selectedCategoryValue) {
+    params.set('category', quizSetup.selectedCategoryValue.toString())
   }
-  if (qSetup.selectedDifficultyValue !== "any") {
-    params.set('difficulty', qSetup.selectedDifficultyValue.toString())
+  if (quizSetup.selectedDifficultyValue !== "any") {
+    params.set('difficulty', quizSetup.selectedDifficultyValue.toString())
   }
-  if (qSetup.selectedTypeValue !== "any") {
-    params.set('type', qSetup.selectedTypeValue.toString())
+  if (quizSetup.selectedTypeValue !== "any") {
+    params.set('type', quizSetup.selectedTypeValue.toString())
   }
 
   const url = `${BASE_URL}?${params.toString()}`;
@@ -67,7 +67,7 @@ export async function fetchQuestions(qSetup: QuizSetup): Promise<QuizResponse> {
     console.error('Error fetching questions:', error);
 
     return {
-      data: null,
+      data: {},
       error: (error as Error).message
     };
   }

@@ -1,4 +1,7 @@
-export interface QuizSetup {
+type QuizDifficulty = "easy" | "medium" | "hard";
+type QuizType = "boolean" | "multiple";
+
+export interface ApiSetup {
   numberOfQuestions: number;
   selectedCategoryValue: number;
   selectedDifficultyValue: string;
@@ -6,23 +9,45 @@ export interface QuizSetup {
   selectedEncodeValue: string;
 }
 
-export interface QuizResponse { // FetchResult {
-  data: any; // TODO:
+export interface ApiResponse {
+  data: ApiResponseData[] | {};
   error: string | null;
 }
 
-interface Question {
+export interface ApiResponseData {
+  category: string;
+  correctAnswer: string;
+  difficulty: QuizDifficulty;
+  incorrectAnswers: string[];
   question: string;
-  correct_answer: string;
-  incorrect_answers: string[];
+  type: QuizType;
 }
 
+export interface QuestionData extends ApiResponseData {
+  id: number;
+  randomAnswers: string[];
+  selectedAnswer?: string | null;
+}
+
+export interface QuizData {
+  questionData: QuestionData[];
+  score: number;
+  time: number;
+  currentQuestionIndex: number;
+  isFinished: boolean;
+}
+
+// export interface QuizStats {
+//   // quizDataMap: Map<number, QuizData>;
+//   scorePercentage: number;
+//   mostPopularDifficulty: QuizDifficulty | null;
+//   mostPopularType: QuizType | null;
+// }
+
 export interface QuizState {
-  quizSetup: QuizSetup,
-  quizResponse: QuizResponse,
-  loading: boolean,
-  // error: string | null,
-  // questions: Question[];
-  // currentQuestionIndex: number;
-  // answers: string[];
+  quizSetup: ApiSetup;
+  quizResponse: QuizResponse;
+  loading: boolean;
+  actualQuiz: QuizData; // | Omit<QuizData, 'questionData'>;
+  // quizStats: QuizStats;
 }
