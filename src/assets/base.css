@@ -8,6 +8,7 @@
   --vt-c-black-soft: #222222;
   --vt-c-black-mute: #282828;
 
+  --vt-c-red: #ff0000c7;
   --vt-c-indigo: #2c3e50;
   --vt-c-greenish: #00bd7e;
 
@@ -36,8 +37,10 @@
 
   --color-accent: var(--vt-c-greenish);
   --color-progress-bar: var(--vt-c-greenish);
-  --color-selected-border: var(--vt-c-indigo);
-  --color-selected-color: var(--vt-c-indigo);
+  
+  --color-selected-option-border: var(--vt-c-indigo);
+  --color-correct-option-background: var(--vt-c-greenish);
+  --color-incorrect-option-background: var(--vt-c-red);
 
   --section-gap: 160px;
 }

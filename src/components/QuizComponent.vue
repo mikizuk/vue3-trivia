@@ -7,10 +7,9 @@ import { convertString } from '@/utils/string'
 
 const router = useRouter()
 const quizStore = useQuizStore()
-const isQuizFinished = computed(() => quizStore.isActualQuizFinished)
+const isActualQuizFinished = computed(() => quizStore.isActualQuizFinished)
 const currentIndex = computed(() => quizStore.getCurrentQuizQuestionIndex)
 const quizQuestions = computed(() => quizStore.getQuizQuestions)
-const isFinishButtonDisabled = computed(() => numberOfSelectedAnswers.value < quizQuestions.value.length)
 const numberOfSelectedAnswers = computed(() => quizStore.numberOfSelectedAnswers);
 const currentQuestion = computed(() => quizQuestions.value[currentIndex.value]);
 
@@ -28,30 +27,33 @@ const previousClick = () => {
 };
 
 const selectAnswerClick = (answer: string) => {
-  if (currentQuestion.value.selectedAnswer === answer) {
-    quizStore.resetAnswer(currentIndex.value)
-  }
-  else {
-    quizStore.chooseAnswer(currentIndex.value, answer)
+  if (!isActualQuizFinished.value) {
+    if (currentQuestion.value.selectedAnswer === answer) {
+      quizStore.resetAnswer(currentIndex.value)
+    }
+    else {
+      quizStore.chooseAnswer(currentIndex.value, answer)
+    }
+    console.info('currentQuestion.value:', currentQuestion.value);
   }
 }
-
 const resetQuizClick = () => {
   quizStore.resetActualQuizData();
   router.push('/')
 }
 const finishQuizClick = () => {
+  quizStore.finishQuiz()
+  showCorrectAnswers()
   // router.push('/summary')
+}
+
+const showCorrectAnswers = () => {
+  console.info('showAnswers!', quizQuestions.value);
 }
 
 </script>
 <template>
-  <div v-if="isQuizFinished">
-    <p>This quiz is finished!</p>
-    <p>go back to home & create new one or</p>
-    <p>go to summary page to see your statistics!</p>
-  </div>
-  <div v-else class="quiz-component">
+  <div class="quiz-component">
     <div v-if="currentQuestion" class="quiz-question">
       <div class="quiz-info">
         <div>
@@ -63,15 +65,19 @@ const finishQuizClick = () => {
       </div>
       <Transition :name="transitionName">
         <div :key="currentQuestion.id" class="quiz-item">
-          <!-- <div style="display: flex; justify-content: space-around; padding-block: 1rem;"> -->
-          <p><span style="">Difficulty:</span> {{ currentQuestion.difficulty }}</p>
-          <p><span style="">Category:</span> {{ convertString(currentQuestion.category) }}</p>
-          <!-- </div> -->
-          <p style="padding-block: 1rem; font-weight: 600;">{{ convertString(currentQuestion.question) }}</p>
-          <ul style="padding-block: 1rem">
-            <!-- @click="() => currentQuestion.selectedAnswer = answer" -->
+          <div style="display: flex; justify-content: space-around;">
+            <p><span style="font-size: small;">Difficulty:</span> {{ currentQuestion.difficulty }}</p>
+            <p><span style="font-size: small;">Category:</span> {{ convertString(currentQuestion.category) }}</p>
+          </div>
+          <strong style="font-weight: 600;">{{ convertString(currentQuestion.question) }}</strong>
+          <!-- style="padding-block: 1rem; font-weight: 600;" -->
+          <ul style="padding: 0; margin-inline: 1rem;">
             <li class="quiz-answer" v-for="answer of currentQuestion.randomAnswers" :key="answer"
-              @click="selectAnswerClick(answer)" :class="{ selected: currentQuestion.selectedAnswer === answer }">
+              @click="selectAnswerClick(answer)" :class="{
+                'quiz-answer--selected': currentQuestion.selectedAnswer === answer,
+                'quiz-answer--correct': isActualQuizFinished && currentQuestion.correctAnswer === answer,
+                'quiz-answer--incorrect': isActualQuizFinished && currentQuestion.incorrectAnswers.find(a => a === answer)
+              }">
               <span>{{ convertString(answer) }}</span>
             </li>
           </ul>
@@ -79,12 +85,23 @@ const finishQuizClick = () => {
       </Transition>
     </div>
   </div>
+  <div class="quiz-status">
+    <div v-if="isActualQuizFinished">
+      <p>You finished the quiz! Cool! Check your statistics in <RouterLink to="/summary">Summary page</RouterLink>.
+      </p>
+      <!-- <div style="display: flex; justify-content: space-around;">
+        <p class="quiz-answer quiz-answer--selected quiz-answer--hint">Selected answer</p>
+        <p class="quiz-answer quiz-answer--selected quiz-answer--correct quiz-answer--hint">Correct answer!!</p>
+        <p class="quiz-answer quiz-answer--selected quiz-answer--incorrect quiz-answer--hint">Incorrect answer</p>
+      </div> -->
+    </div>
+  </div>
   <div class="button-wrapper">
     <button class="button" @click="previousClick" :disabled="currentIndex === 0">Previous question</button>
     <button class="button" @click="nextClick" :disabled="currentIndex === quizQuestions.length - 1">Next
       question</button>
-    <button class="button" @click="resetQuizClick">Reset quiz</button>
-    <button class="button" @click="finishQuizClick" :disabled="isFinishButtonDisabled">Finish quiz</button>
+    <button class="button" @click="resetQuizClick" :disabled="isActualQuizFinished">Reset quiz</button>
+    <button class="button" @click="finishQuizClick" :disabled="isActualQuizFinished">Finish quiz</button>
   </div>
 </template>
 
@@ -121,7 +138,7 @@ const finishQuizClick = () => {
   overflow: hidden;
   /* max-width: 400px; */
   width: 100%;
-  min-height: 40vh;
+  min-height: 55vh;
   /* min-height: 500px; */
   /* height: 100%; */
   position: relative;
@@ -147,9 +164,24 @@ const finishQuizClick = () => {
   /* max-width: 400px; */
 }
 
-.quiz-answer.selected {
-  border: 2px solid var(--color-selected-border);
-  /* background-color: var(--vt-c-divider-light-1); */
+.quiz-answer--hint {
+  font-size: .8rem;
+  text-align: center;
+  /* width: 150px; */
+  padding-inline: 8px;
+  /* margin-block: 5px; */
+}
+
+.quiz-answer--selected {
+  border: 2px solid var(--color-selected-option-border);
+}
+
+.quiz-answer--correct {
+  background-color: var(--color-correct-option-background);
+}
+
+.quiz-answer--incorrect {
+  background-color: var(--color-incorrect-option-background);
 }
 
 /* Slide right animation */

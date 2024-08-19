@@ -4,7 +4,7 @@ import type { ApiResponse, ApiSetup, ApiResponseData, QuestionData, QuizData, /*
 import { shuffleItems } from '@/utils/array';
 
 const initialQuizSetup: ApiSetup = {
-  numberOfQuestions: 5,
+  numberOfQuestions: 2, // 3,
   selectedCategoryValue: 0,
   selectedDifficultyValue: "any",
   selectedTypeValue: "any",
@@ -46,8 +46,9 @@ export const useQuizStore = defineStore('quiz', {
     getResponseError: (state) => state.quizResponse.error,
     getQuizResponse: (state) => state.quizResponse,
     //
-    isQuizCreated: (state) => !!state.actualQuiz.questionData.length,
+    isActualQuizCreated: (state) => !!state.actualQuiz.questionData.length,
     isActualQuizFinished: (state) => state.actualQuiz.isFinished,
+    // isActualQuizCreatedAndFinished: (state) => state.isActualQuizCreated && state.isActualQuizFinished,
     getCurrentQuizQuestionIndex: (state) => state.actualQuiz.currentQuestionIndex,
     getQuizQuestions: (state) => state.actualQuiz.questionData,
     //
@@ -74,6 +75,7 @@ export const useQuizStore = defineStore('quiz', {
       }
     },
     prepareQuiz(data: ApiResponseData[]) {
+      this.resetActualQuizData()
       const questionData: QuestionData[] = data.map((dataItem: ApiResponseData, index: number) => ({
           ...dataItem,
           id: index,
@@ -86,13 +88,16 @@ export const useQuizStore = defineStore('quiz', {
         questionData
       }
     },
+    checkIfQuizHasAllAnswers() {
+      return this.numberOfSelectedAnswers < this.actualQuiz.questionData.length
+    },
     resetAnswer(index: number) {
       this.actualQuiz.questionData[index].selectedAnswer =  null;
       // TODO: check if all answers selected
     },
     chooseAnswer(index: number, answer: string) {
       this.actualQuiz.questionData[index].selectedAnswer = answer;
-      // TODO: check correct answer
+      // this.checkIsQuizFinished()
     },
     goToNextQuestion() {
       if (this.actualQuiz.currentQuestionIndex < this.actualQuiz.questionData.length - 1) {
@@ -110,9 +115,17 @@ export const useQuizStore = defineStore('quiz', {
     resetActualQuizData() {
       this.actualQuiz = initialQuizData;
     },
+    finishQuiz() {
+      console.info('FINISH QUIZ!', );
+      this.actualQuiz.isFinished = true;
+      // this.colour wrong and correct answers
+      this.prepareStats() 
+      // this.resetActualQuizData()
+    },
     prepareStats() {
-
-      // TODO: resetQuiz() {
+      console.info('PREPARE STATS! this.actualQuiz', this.actualQuiz);
+      // TODO: check correct answer
+      
     },
   },
 });

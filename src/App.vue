@@ -23,7 +23,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <style scoped>
 header {
-  padding: 1rem;
+  /* padding: 1rem; */
   line-height: 1.5;
   max-height: 100vh;
 }
@@ -76,7 +76,9 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: calc(var(--section-gap) / 8);
+  /* margin-block: 5px; */
+  padding: 8px;
+  /* padding: calc(var(--section-gap) / 8); */
   height: 100%;
 
 }

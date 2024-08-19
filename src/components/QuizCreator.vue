@@ -69,7 +69,7 @@ const isButtonDisabled = computed(() => {
 
 .form-grid {
   display: grid;
-  grid-template-columns: 1fr 198px;
+  grid-template-columns: 1fr 170px;
   gap: 8px;
   margin-block: 1rem;
 }
