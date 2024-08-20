@@ -52,7 +52,7 @@ const isButtonDisabled = computed(() => {
         </option>
       </select>
     </div>
-    <p style="font-size: small;">* minimum number of questions is {{ MIN_QUESTIONS }} and maximum is {{ MAX_QUESTIONS }}
+    <p class="form-info">* minimum number of questions is {{ MIN_QUESTIONS }} and maximum is {{ MAX_QUESTIONS }}
     </p>
     <div class="button-wrapper">
       <button class="button" :disabled=isButtonDisabled type="submit">Create Quiz</button>
@@ -72,5 +72,11 @@ const isButtonDisabled = computed(() => {
   grid-template-columns: 1fr 170px;
   gap: 8px;
   margin-block: 1rem;
+}
+
+.form-info {
+  font-size: small;
+  padding-block: 0.5rem;
+
 }
 </style>

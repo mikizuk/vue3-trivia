@@ -69,7 +69,7 @@ const showCorrectAnswers = () => {
             <p><span style="font-size: small;">Difficulty:</span> {{ currentQuestion.difficulty }}</p>
             <p><span style="font-size: small;">Category:</span> {{ convertString(currentQuestion.category) }}</p>
           </div>
-          <strong style="font-weight: 600;">{{ convertString(currentQuestion.question) }}</strong>
+          <strong style="padding-block: .5rem; t: 600;">{{ convertString(currentQuestion.question) }}</strong>
           <!-- style="padding-block: 1rem; font-weight: 600;" -->
           <ul style="padding: 0; margin-inline: 1rem;">
             <li class="quiz-answer" v-for="answer of currentQuestion.randomAnswers" :key="answer"
@@ -110,6 +110,7 @@ const showCorrectAnswers = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 100%;
 }
 
 .progress-bar {
@@ -138,10 +139,11 @@ const showCorrectAnswers = () => {
   overflow: hidden;
   /* max-width: 400px; */
   width: 100%;
-  min-height: 55vh;
+  min-height: 50vh;
   /* min-height: 500px; */
-  /* height: 100%; */
+  height: 100%;
   position: relative;
+  /* border: 1px solid blue; */
 }
 
 .quiz-item {
@@ -153,6 +155,8 @@ const showCorrectAnswers = () => {
   height: 100%;
   /* white-space: nowrap; */
   position: absolute;
+  /* border: 1px solid red; */
+  /* top: 60%; */
 }
 
 .quiz-answer {

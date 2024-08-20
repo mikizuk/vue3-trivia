@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ChartComponent from '@/components/ChartComponent.vue';
 </script>
 
 
@@ -11,6 +12,7 @@
     </div>
     <h2>All quiz statistics</h2>
     <div>
+      <ChartComponent />
     </div>
   </div>
 </template>

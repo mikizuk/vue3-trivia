@@ -77,7 +77,7 @@ main {
   flex-direction: column;
   align-items: center;
   /* margin-block: 5px; */
-  padding: 8px;
+  padding-block: 10px;
   /* padding: calc(var(--section-gap) / 8); */
   height: 100%;
 

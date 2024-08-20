@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-// import { useQuizStore } from '@/stores/quiz';
 import HomeView from '../views/HomeView.vue'
+import QuizView from '../views/QuizView.vue'
+import SummaryView from '../views/SummaryView.vue'
+// import { useQuizStore } from '@/stores/quiz';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,12 +15,12 @@ const router = createRouter({
     {
       path: '/quiz',
       name: 'quiz',
-      component: () => import('../views/QuizView.vue'),
+      component: QuizView,
     },
     {
       path: '/summary',
       name: 'summary',
-      component: () => import('../views/SummaryView.vue'),
+      component: SummaryView,
       meta: { requiresData: true }
     }
   ]
