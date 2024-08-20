@@ -25,7 +25,7 @@ import { RouterLink, RouterView } from 'vue-router'
 header {
   /* padding: 1rem; */
   line-height: 1.5;
-  max-height: 100vh;
+  /* max-height: 100vh; */
 }
 
 .header__nav {

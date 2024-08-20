@@ -20,9 +20,10 @@ const isButtonDisabled = computed(() => {
   <form @submit.prevent="emit('createQuiz', qSetup)" class="quiz-creator">
     <h2>Please create you quiz:</h2>
     <div class="form-grid">
-      <label class="form-label" for="form-questions">Number of questions:*</label>
+      <label class="form-label" for="form-questions">Number of questions: *</label>
       <input class="form-input" name="form-questions" id="form-questions" v-model.number="qSetup.numberOfQuestions"
         type="number" :min="MIN_QUESTIONS" :max="MAX_QUESTIONS" />
+      <p class="form-info">* minimum number of questions is {{ MIN_QUESTIONS }} and maximum is {{ MAX_QUESTIONS }}</p>
       <label class="form-label" for="form-category">Select category:</label>
       <select class="form-input" name="form-category" id="form-category" v-model="qSetup.selectedCategoryValue">
         <option v-for="category of categories" :key="category.value"
@@ -44,16 +45,15 @@ const isButtonDisabled = computed(() => {
           {{ type.text }}
         </option>
       </select>
-      <label class="form-label" for="form-encoding">Select encoding:</label>
+      <label class="form-label" for="form-encoding">Select encoding: **</label>
       <select class="form-input" name="form-encoding" id="form-encoding" v-model="qSetup.selectedEncodeValue" disabled>
         <option v-for="encode of encodes" :key="encode.value" :selected="encode.value === qSetup.selectedEncodeValue"
           :value="encode.value">
           {{ encode.text }}
         </option>
       </select>
+      <p class="form-info">** Selection enabled in paid version</p>
     </div>
-    <p class="form-info">* minimum number of questions is {{ MIN_QUESTIONS }} and maximum is {{ MAX_QUESTIONS }}
-    </p>
     <div class="button-wrapper">
       <button class="button" :disabled=isButtonDisabled type="submit">Create Quiz</button>
     </div>
@@ -76,7 +76,6 @@ const isButtonDisabled = computed(() => {
 
 .form-info {
   font-size: small;
-  padding-block: 0.5rem;
-
+  grid-column: 1 / 3;
 }
 </style>
