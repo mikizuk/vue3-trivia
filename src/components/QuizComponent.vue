@@ -139,8 +139,8 @@ const showCorrectAnswers = () => {
   overflow: hidden;
   /* max-width: 400px; */
   width: 100%;
-  min-height: 50vh;
-  /* min-height: 500px; */
+  /* min-height: 55vh; */
+  min-height: 380px;
   height: 100%;
   position: relative;
   /* border: 1px solid blue; */
