@@ -1,4 +1,4 @@
-const calculateTimeDifference = (timeOne: number, timeTwo: number): number => {
+export const calculateTimeDifference = (timeOne: number, timeTwo: number): number => {
   if (!timeOne || !timeTwo || (timeTwo < timeOne)) {
     return 0;
   }
@@ -32,9 +32,6 @@ export const getTimeNow = (): number => {
 export const calculateTimeSpend = (startTime: number, endTime: number): number => {
   const durationInMs = calculateTimeDifference(startTime, endTime);
   return durationInMs;
-  // const timeFormatted = formatDuration(durationInMs);
-
-  // return timeFormatted;
 } 
 // export const calculateTimeSpendFormatted = (startTime: number, endTime: number): string => {
 //   const durationInMs = calculateTimeDifference(startTime, endTime);

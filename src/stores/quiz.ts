@@ -83,15 +83,8 @@ export const useQuizStore = defineStore('quiz', {
     //
     numberOfSelectedAnswers: (state) => state.actualQuiz.questionsData.filter(q => q.selectedAnswer).length,
     //
-    // getFinishedQuizNumber: (state) => state.quizStats.length,
-    // getQuizStats: (state) => state.quizStats,
-    getLatestQuizStats: (state) => state.quizStats.quizItemStats,
-    // getLatestQuizStats: (state) => state.quizStats[state.quizStats.length - 1],
-    // getCurrentQuestion: (state) => state.actualQuiz.questionsData[state.actualQuiz.currentQuestionIndex],
-    // allQuestions: (state) => state.questions,
-    // currentQuestion: (state) => state.questions[state.currentQuestionIndex],
-    // progress: (state) => (state.currentQuestionIndex + 1) / state.questions.length * 100,
-    // isQuizComplete: (state) => state.currentQuestionIndex >= state.questions.length,
+    getAllItemsStats: (state) => state.quizStats.quizItemStats,
+    getTotalStats: (state) => state.quizStats.totalQuizItemsStats || {},
   },
 
   actions: {

@@ -1,4 +1,6 @@
 import type { QuestionData, QuizType, QuizDifficulty, QuizItemFinished } from "@/types/types";
+import { roundNumber2Digits } from "./numberUtils";
+
 
 export const shuffleItems = (array: string[]) => array
   .map(value => ({ value, sort: Math.random() }))
@@ -17,7 +19,7 @@ export const calculateScorePercentage = (array: QuestionData[]): number => {
     return 0
   }
   const percentage = calculateScore(array) / array.length
-  return parseFloat(percentage.toFixed(2)) * 100
+  return roundNumber2Digits(percentage) * 100
 }
 
 const calculateMostPopular = <T>(
@@ -52,7 +54,7 @@ export const getAverageOf = <T extends Record<string, any>>(array: T[], key: key
   if (!array.length) {
     return 0
   }
-  return (getSumOf(array, key) / array.length);
+  return roundNumber2Digits((getSumOf(array, key) / array.length));
 }
 
 export const calculateTheMostPopularCategory = (array: QuestionData[]): string | null => {

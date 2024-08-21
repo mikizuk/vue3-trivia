@@ -58,7 +58,7 @@ const finishQuizClick = () => {
         <p>Question: {{ currentIndex + 1 }}/{{ quizQuestions.length }}</p>
       </div>
       <Transition :name="transitionName">
-        <div :key="currentQuestion.id" class="quiz-item">
+        <div :key="currentQuestion.id" class="quiz-question-item">
           <div style="display: flex; justify-content: space-around;">
             <p><span style="font-size: small;">Difficulty:</span> {{ currentQuestion.difficulty }}</p>
             <p><span style="font-size: small;">Category:</span> {{ convertString(currentQuestion.category) }}</p>
@@ -140,7 +140,7 @@ const finishQuizClick = () => {
   /* border: 1px solid blue; */
 }
 
-.quiz-item {
+.quiz-question-item {
   display: flex;
   /* align-items: center; */
   /* justify-content: center; */

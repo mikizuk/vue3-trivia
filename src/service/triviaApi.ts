@@ -1,5 +1,5 @@
 import type { ApiSetup, ApiResponse } from "@/types/types";
-import { convertKeysToCamelCase } from "@/utils/object";
+import { convertKeysToCamelCase } from "@/utils/objectUtils";
 
 enum ReponseEnum {
   Success = 0,

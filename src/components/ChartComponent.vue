@@ -1,17 +1,25 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { Bar } from 'vue-chartjs';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, scales } from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+const props = defineProps<{
+  resultsScore: number[],
+  resultsPercentage: number[],
+}>()
+
+const resultsLabel = computed(() => {
+  return props.resultsScore.map((res, index) => `Quiz: ${index + 1}, score: ${res}`)
+})
+const resultsRef = ref(props.resultsPercentage)
 
 const chartData = ref({
-  labels: ['1st quiz', '2nd quiz', '3rd quiz', '4th quiz'],
+  labels: resultsLabel,
   datasets: [
     {
       label: '% of correct answers',
       backgroundColor: '#00bd7e',
-      data: [30, 39, 10, 80],
+      data: resultsRef.value,
     }
   ]
 });
@@ -30,27 +38,18 @@ const chartOptions = ref({
     },
     tooltip: {
       callbacks: {
-        label: function (context) {
-          console.log("context:", context);
-          let label = context.dataset.label || '';
-          if (label) {
-            label += ': ';
-          }
-          if (context.parsed.y !== null) {
-            label += `${context.parsed.y}`;
-          }
-          return label;
+        label: function (context: any) {
+          return `${context?.dataset?.label || 'label'}: ${context?.formattedValue || 'value'}`;
         }
       }
     }
   }
 });
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
 </script>
 
 <template>
   <Bar :data="chartData" :options="chartOptions" />
 </template>
-
-<style scoped>
-/* Add any styles for your chart component here */
-</style>

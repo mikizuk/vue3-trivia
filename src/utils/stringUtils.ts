@@ -90,5 +90,6 @@ export const convertString = (text: string): string => {
     .replace(/&rdquo;/, '”')
     .replace(/&rsquo;/, '’')
     .replace(/&lsquo;/, '‘')
+    .replace(/&sup2;/, '²')
     ;
 }
