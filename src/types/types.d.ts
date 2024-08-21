@@ -1,5 +1,5 @@
-type QuizDifficulty = "easy" | "medium" | "hard";
-type QuizType = "boolean" | "multiple";
+export type QuizDifficulty = "easy" | "medium" | "hard";
+export type QuizType = "boolean" | "multiple";
 
 export interface ApiSetup {
   numberOfQuestions: number;
@@ -29,25 +29,42 @@ export interface QuestionData extends ApiResponseData {
   selectedAnswer?: string | null;
 }
 
-export interface QuizData {
-  questionData: QuestionData[];
-  score: number;
-  time: number;
+export interface QuizItemStarted {
+  questionsData: QuestionData[];
+  timeCouter: number;
   currentQuestionIndex: number;
   isFinished: boolean;
 }
 
-// export interface QuizStats {
-//   // quizDataMap: Map<number, QuizData>;
-//   scorePercentage: number;
-//   mostPopularDifficulty: QuizDifficulty | null;
-//   mostPopularType: QuizType | null;
-// }
+export interface QuizItemFinished extends QuizItemStarted {
+  timeSpend: number;
+  timeSpendFormatted: string;
+  score: number;
+  scorePercentage: number;
+  mostPopularCategory: string | null;
+  mostPopularDifficulty: QuizDifficulty | null;
+  mostPopularType: QuizType | null;
+}
+
+export interface QuizTotal {
+  totalTimeSpend: number;
+  totalTimeSpendFormatted: string;
+  totalScore: number;
+  totalScorePercentage: number;
+  totalMostPopularCategory: string | null;
+  totalMostPopularDifficulty: QuizDifficulty | null;
+  totalMostPopularType: QuizType | null;
+}
+
+export interface QuizDataStats {
+  quizItemStats: QuizItemFinished[];
+  totalQuizItemsStats: QuizTotal;
+}
 
 export interface QuizState {
   quizSetup: ApiSetup;
   quizResponse: QuizResponse;
   loading: boolean;
-  actualQuiz: QuizData; // | Omit<QuizData, 'questionData'>;
-  // quizStats: QuizStats;
+  actualQuiz: QuizItemStarted;
+  quizStats: QuizDataStats;
 }

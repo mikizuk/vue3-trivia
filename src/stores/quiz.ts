@@ -1,10 +1,33 @@
+// import { computed } from 'vue';
 import { defineStore } from 'pinia';
 import { fetchQuestions } from '@/service/triviaApi';
-import type { ApiResponse, ApiSetup, ApiResponseData, QuestionData, QuizData, /* QuizStats, */ QuizState } from "@/types/types";
-import { shuffleItems } from '@/utils/array';
+import { shuffleItems } from '@/utils/arrayUtils';
+import { getTimeNow, formatDuration, calculateTimeSpend } from "@/utils/dateUtils";
+import {
+  calculateScore,
+  calculateScorePercentage,
+  calculateTheMostPopularCategory,
+  calculateTheMostPopularType,
+  calculateMostPopularDifficulty,
+  mergeQuestionsDataReduce,
+  getSumOf,
+  getAverageOf,
+} from "@/utils/arrayUtils";
+import type {
+  ApiResponse,
+  ApiSetup,
+  ApiResponseData,
+  QuestionData,
+  QuizItemStarted,
+  QuizItemFinished,
+  // QuizTotal,
+  QuizDataStats,
+  QuizState
+} from "@/types/types";
+// import { toRaw } from 'vue';
 
 const initialQuizSetup: ApiSetup = {
-  numberOfQuestions: 2, // 3,
+  numberOfQuestions: 3,
   selectedCategoryValue: 0,
   selectedDifficultyValue: "any",
   selectedTypeValue: "any",
@@ -16,20 +39,26 @@ const initialQuizResponse: ApiResponse = {
   error: null,
 }
 
-const initialQuizData: QuizData = {
-  // questionData are to be merged with correctAnswer & incorrectAnswers from ApiResponseData
-  questionData: [],
-  score: 0,
-  time: 0,
+const initialQuizData: QuizItemStarted = {
+  // questionsData are to be merged with correctAnswer & incorrectAnswers from ApiResponseData
+  questionsData: [],
+  timeCouter: 0,
   currentQuestionIndex: 0,
   isFinished: false // TODO check true
 }
 
-// const initialQuizStats: QuizStats = {
-//   scorePercentage: 0,
-//   mostPopularDifficulty: null,
-//   mostPopularType: null,
-// }
+const initialQuizStats: QuizDataStats = {
+  quizItemStats: [],
+  totalQuizItemsStats:  {
+    totalTimeSpend: 0,
+    totalTimeSpendFormatted: '',
+    totalScore: 0,
+    totalScorePercentage: 0,
+    totalMostPopularCategory: null,
+    totalMostPopularDifficulty: null,
+    totalMostPopularType: null,
+  }
+}
 
 export const useQuizStore = defineStore('quiz', {
   state: (): QuizState => ({
@@ -37,7 +66,7 @@ export const useQuizStore = defineStore('quiz', {
     quizResponse: initialQuizResponse,
     loading: false,
     actualQuiz: initialQuizData,
-    // quizStats: new Map<number, QuizData>(),
+    quizStats: initialQuizStats,
   }),
 
   getters: {
@@ -46,14 +75,19 @@ export const useQuizStore = defineStore('quiz', {
     getResponseError: (state) => state.quizResponse.error,
     getQuizResponse: (state) => state.quizResponse,
     //
-    isActualQuizCreated: (state) => !!state.actualQuiz.questionData.length,
+    isActualQuizCreated: (state) => !!state.actualQuiz.questionsData.length,
     isActualQuizFinished: (state) => state.actualQuiz.isFinished,
     // isActualQuizCreatedAndFinished: (state) => state.isActualQuizCreated && state.isActualQuizFinished,
     getCurrentQuizQuestionIndex: (state) => state.actualQuiz.currentQuestionIndex,
-    getQuizQuestions: (state) => state.actualQuiz.questionData,
+    getQuizQuestions: (state) => state.actualQuiz.questionsData,
     //
-    numberOfSelectedAnswers: (state) => state.actualQuiz.questionData.filter(q => q.selectedAnswer).length,
-    // getCurrentQuestion: (state) => state.actualQuiz.questionData[state.actualQuiz.currentQuestionIndex],
+    numberOfSelectedAnswers: (state) => state.actualQuiz.questionsData.filter(q => q.selectedAnswer).length,
+    //
+    // getFinishedQuizNumber: (state) => state.quizStats.length,
+    // getQuizStats: (state) => state.quizStats,
+    getLatestQuizStats: (state) => state.quizStats.quizItemStats,
+    // getLatestQuizStats: (state) => state.quizStats[state.quizStats.length - 1],
+    // getCurrentQuestion: (state) => state.actualQuiz.questionsData[state.actualQuiz.currentQuestionIndex],
     // allQuestions: (state) => state.questions,
     // currentQuestion: (state) => state.questions[state.currentQuestionIndex],
     // progress: (state) => (state.currentQuestionIndex + 1) / state.questions.length * 100,
@@ -62,6 +96,7 @@ export const useQuizStore = defineStore('quiz', {
 
   actions: {
     async loadQuestions(setupData: ApiSetup) {
+      this.resetActualQuizData();
       this.resetQuizResponse();
       this.loading = true;
       
@@ -75,8 +110,8 @@ export const useQuizStore = defineStore('quiz', {
       }
     },
     prepareQuiz(data: ApiResponseData[]) {
-      this.resetActualQuizData()
-      const questionData: QuestionData[] = data.map((dataItem: ApiResponseData, index: number) => ({
+      // this.resetActualQuizData()
+      const questionsData: QuestionData[] = data?.map((dataItem: ApiResponseData, index: number) => ({
           ...dataItem,
           id: index,
           randomAnswers: shuffleItems([dataItem.correctAnswer, ...dataItem.incorrectAnswers]),
@@ -85,22 +120,22 @@ export const useQuizStore = defineStore('quiz', {
 
       this.actualQuiz = {
         ...this.actualQuiz,
-        questionData
+        timeCouter: getTimeNow(),
+        questionsData
       }
     },
     checkIfQuizHasAllAnswers() {
-      return this.numberOfSelectedAnswers < this.actualQuiz.questionData.length
+      return this.numberOfSelectedAnswers < this.actualQuiz.questionsData.length
     },
     resetAnswer(index: number) {
-      this.actualQuiz.questionData[index].selectedAnswer =  null;
-      // TODO: check if all answers selected
+      this.actualQuiz.questionsData[index].selectedAnswer =  null;
     },
     chooseAnswer(index: number, answer: string) {
-      this.actualQuiz.questionData[index].selectedAnswer = answer;
+      this.actualQuiz.questionsData[index].selectedAnswer = answer;
       // this.checkIsQuizFinished()
     },
     goToNextQuestion() {
-      if (this.actualQuiz.currentQuestionIndex < this.actualQuiz.questionData.length - 1) {
+      if (this.actualQuiz.currentQuestionIndex < this.actualQuiz.questionsData.length - 1) {
         this.actualQuiz.currentQuestionIndex++;
       }
     },
@@ -116,16 +151,37 @@ export const useQuizStore = defineStore('quiz', {
       this.actualQuiz = initialQuizData;
     },
     finishQuiz() {
-      console.info('FINISH QUIZ!', );
-      this.actualQuiz.isFinished = true;
-      // this.colour wrong and correct answers
+      this.actualQuiz.isFinished = true
       this.prepareStats() 
-      // this.resetActualQuizData()
     },
     prepareStats() {
-      console.info('PREPARE STATS! this.actualQuiz', this.actualQuiz);
-      // TODO: check correct answer
+      const timeEnded = getTimeNow();
+      const timeSpend = calculateTimeSpend(this.actualQuiz.timeCouter, timeEnded);
+      const newQuizStats: QuizItemFinished  = {
+        ...this.actualQuiz,
+        timeSpend,
+        timeSpendFormatted: formatDuration(timeSpend),
+        score: calculateScore(this.actualQuiz.questionsData),
+        scorePercentage: calculateScorePercentage(this.actualQuiz.questionsData),
+        mostPopularCategory: calculateTheMostPopularCategory(this.actualQuiz.questionsData),
+        mostPopularType: calculateTheMostPopularType(this.actualQuiz.questionsData),
+        mostPopularDifficulty: calculateMostPopularDifficulty(this.actualQuiz.questionsData),
+      }
+      this.quizStats.quizItemStats.push(newQuizStats)
       
+      const allQuestionData = mergeQuestionsDataReduce(this.quizStats.quizItemStats)
+      const totalTimeSpend = getSumOf(this.quizStats.quizItemStats, 'timeSpend')
+      this.quizStats.totalQuizItemsStats = {
+        totalTimeSpend, // calculateTotalTimeSpend(allQuestionData),
+        totalTimeSpendFormatted: formatDuration(totalTimeSpend), // calculateTotalTimeSpendFormatted(allQuestionData),
+        totalScore: getSumOf(this.quizStats.quizItemStats, 'score'), // calculateTotalScore(allQuestionData)
+        totalScorePercentage: getAverageOf(this.quizStats.quizItemStats, 'scorePercentage'), // calculateTotalScorePercentage(allQuestionData)
+        totalMostPopularCategory: calculateTheMostPopularCategory(allQuestionData),
+        totalMostPopularDifficulty: calculateMostPopularDifficulty(allQuestionData),
+        totalMostPopularType: calculateTheMostPopularType(allQuestionData),
+      }
+
+      console.info('PREPARE STATS!', 'this.quizStats', this.quizStats);
     },
   },
 });

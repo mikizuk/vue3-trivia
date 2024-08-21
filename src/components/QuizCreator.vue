@@ -5,6 +5,7 @@ import type { ApiSetup } from "@/types/types";
 import { MAX_QUESTIONS, MIN_QUESTIONS } from "@/service/triviaApi";
 import { storeToRefs } from 'pinia'
 import { useQuizStore } from '@/stores/quiz';
+import { convertString } from '@/utils/stringUtils'
 
 const quizStore = useQuizStore()
 const { quizSetup } = storeToRefs(quizStore)
@@ -28,7 +29,7 @@ const isButtonDisabled = computed(() => {
       <select class="form-input" name="form-category" id="form-category" v-model="qSetup.selectedCategoryValue">
         <option v-for="category of categories" :key="category.value"
           :selected="category.value === qSetup.selectedCategoryValue" :value="category.value">
-          {{ category.text }}
+          {{ convertString(category.text) }}
         </option>
       </select>
       <label class="form-label" for="form-difficulty">Select difficulty:</label>

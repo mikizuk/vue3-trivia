@@ -85,5 +85,10 @@ export const convertString = (text: string): string => {
     .replace(/&copy;/, '©')
     .replace(/&reg;/, '®')
     .replace(/&#167;/, '§')
-    .replace(/&#182;/, '¶');
+    .replace(/&#182;/, '¶')
+    .replace(/&ldquo;/, '“')
+    .replace(/&rdquo;/, '”')
+    .replace(/&rsquo;/, '’')
+    .replace(/&lsquo;/, '‘')
+    ;
 }

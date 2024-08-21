@@ -16,7 +16,7 @@ const isError = computed(() => quizStore.isResponseError)
 const showErrorText = computed(() => quizStore.getResponseError)
 
 const createQuiz = async (quizSetup: ApiSetup): Promise<void> => {
-  quizStore.resetActualQuizData();
+  // quizStore.resetActualQuizData();
   await quizStore.loadQuestions(quizSetup)
 
   if (isError.value === false) {

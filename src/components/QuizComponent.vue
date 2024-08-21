@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 // import { storeToRefs } from 'pinia'
 import { useQuizStore } from '@/stores/quiz';
 import { useRouter } from 'vue-router'
-import { convertString } from '@/utils/string'
+import { convertString } from '@/utils/stringUtils'
 
 const router = useRouter()
 const quizStore = useQuizStore()
@@ -34,7 +34,6 @@ const selectAnswerClick = (answer: string) => {
     else {
       quizStore.chooseAnswer(currentIndex.value, answer)
     }
-    console.info('currentQuestion.value:', currentQuestion.value);
   }
 }
 const resetQuizClick = () => {
@@ -43,12 +42,7 @@ const resetQuizClick = () => {
 }
 const finishQuizClick = () => {
   quizStore.finishQuiz()
-  showCorrectAnswers()
   // router.push('/summary')
-}
-
-const showCorrectAnswers = () => {
-  console.info('showAnswers!', quizQuestions.value);
 }
 
 </script>
