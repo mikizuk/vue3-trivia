@@ -22,7 +22,7 @@ export const calculateScorePercentage = (array: QuestionData[]): number => {
   return roundNumber2Digits(percentage) * 100
 }
 
-const calculateMostPopular = <T>(
+export const calculateMostPopular = <T>(
   array: QuestionData[], 
   keySelector: (item: QuestionData) => T
 ): T | null => {

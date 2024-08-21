@@ -1,5 +1,5 @@
 export const calculateTimeDifference = (timeOne: number, timeTwo: number): number => {
-  if (!timeOne || !timeTwo || (timeTwo < timeOne)) {
+  if (timeTwo < timeOne) {
     return 0;
   }
   return timeTwo - timeOne;

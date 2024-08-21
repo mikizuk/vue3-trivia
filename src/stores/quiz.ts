@@ -1,4 +1,3 @@
-// import { computed } from 'vue';
 import { defineStore } from 'pinia';
 import { fetchQuestions } from '@/service/triviaApi';
 import { shuffleItems } from '@/utils/arrayUtils';
@@ -24,7 +23,6 @@ import type {
   QuizDataStats,
   QuizState
 } from "@/types/types";
-// import { toRaw } from 'vue';
 
 const initialQuizSetup: ApiSetup = {
   numberOfQuestions: 3,
@@ -77,7 +75,6 @@ export const useQuizStore = defineStore('quiz', {
     //
     isActualQuizCreated: (state) => !!state.actualQuiz.questionsData.length,
     isActualQuizFinished: (state) => state.actualQuiz.isFinished,
-    // isActualQuizCreatedAndFinished: (state) => state.isActualQuizCreated && state.isActualQuizFinished,
     getCurrentQuizQuestionIndex: (state) => state.actualQuiz.currentQuestionIndex,
     getQuizQuestions: (state) => state.actualQuiz.questionsData,
     //
@@ -103,7 +100,6 @@ export const useQuizStore = defineStore('quiz', {
       }
     },
     prepareQuiz(data: ApiResponseData[]) {
-      // this.resetActualQuizData()
       const questionsData: QuestionData[] = data?.map((dataItem: ApiResponseData, index: number) => ({
           ...dataItem,
           id: index,
@@ -173,8 +169,6 @@ export const useQuizStore = defineStore('quiz', {
         totalMostPopularDifficulty: calculateMostPopularDifficulty(allQuestionData),
         totalMostPopularType: calculateTheMostPopularType(allQuestionData),
       }
-
-      console.info('PREPARE STATS!', 'this.quizStats', this.quizStats);
     },
   },
 });
