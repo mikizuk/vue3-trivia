@@ -13,7 +13,7 @@ const resultsPercentage = allItemsStats.value.map(stat => stat.scorePercentage)
 
 <template>
   <h1>Quiz Summary</h1>
-  <h2>Statistics of all quizes</h2>
+  <h2>Statistics of all quizzes</h2>
   <div v-if="totalStats?.totalTimeSpend" class="summary">
     <span>Time spend:</span><span class="summary__stat-item">{{ totalStats.totalTimeSpendFormatted }}</span>
     <span>Score:</span><span class="summary__stat-item">{{ totalStats.totalScore }}</span>
@@ -26,7 +26,7 @@ const resultsPercentage = allItemsStats.value.map(stat => stat.scorePercentage)
   <div v-if="resultsScore" class="summary-chart">
     <ChartComponent :resultsScore :resultsPercentage />
   </div>
-  <p>Go ahead <RouterLink to="/">finish more quizes</RouterLink> to see more results!</p>
+  <p>Go ahead <RouterLink to="/">finish more quizzes</RouterLink> to see more results!</p>
 
 </template>
 
