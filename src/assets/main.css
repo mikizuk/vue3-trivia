@@ -81,6 +81,7 @@ a {
   margin-top: auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
+  align-self: center;
 }
 
 .button {
@@ -93,19 +94,14 @@ a {
   min-width: 175px;
 }
 
-/* @media (min-width: 768px) {
-
-} */
+@media (min-width: 768px) {
+  .button-wrapper {
+    gap: .6rem 1rem;
+  }
+}
 
 @media (min-width: 1024px) {
-  /* body {
-    display: flex;
-    place-items: center;
-  } */
-
-  /* #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  } */
+  .button-wrapper {
+    gap: 1rem 1.4rem;
+  }
 }

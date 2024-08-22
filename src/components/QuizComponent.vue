@@ -212,5 +212,15 @@ const finishQuizClick = () => {
   .quiz__question-info {
     font-size: 1rem;
   }
+
+  .quiz__question-text {
+    padding-block: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .quiz__question-text {
+    padding-block: 1.2rem;
+  }
 }
 </style>

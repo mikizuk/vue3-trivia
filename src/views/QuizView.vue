@@ -28,13 +28,14 @@ const isActualQuizCreated = computed(() => quizStore.isActualQuizCreated)
 
 @media (min-width: 768px) {
   .quiz-component-wrapper {
+    min-width: 500px;
     padding-block: 2rem;
   }
 }
 
 @media (min-width: 1024px) {
   .quiz-component-wrapper {
-    padding-block: 3rem;
+    padding-block: 2.2rem;
   }
 }
 </style>
