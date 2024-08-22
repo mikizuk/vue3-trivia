@@ -37,7 +37,7 @@ describe('useQuizStore', () => {
   it('initializes with the correct default state', () => {
     const quizStore = useQuizStore();
 
-    expect(quizStore.quizSetup.numberOfQuestions).toBe(3);
+    expect(quizStore.quizSetup.numberOfQuestions).toBe(5);
     expect(quizStore.quizResponse.data).toEqual({});
     expect(quizStore.actualQuiz.questionsData).toHaveLength(0);
     expect(quizStore.quizStats.quizItemStats).toHaveLength(0);

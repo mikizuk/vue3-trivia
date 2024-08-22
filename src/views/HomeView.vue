@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from "vue";
-// import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import QuizCreator from '@/components/QuizCreator.vue';
 import type { ApiSetup } from "@/types/types";
@@ -16,7 +15,6 @@ const isError = computed(() => quizStore.isResponseError)
 const showErrorText = computed(() => quizStore.getResponseError)
 
 const createQuiz = async (quizSetup: ApiSetup): Promise<void> => {
-  // quizStore.resetActualQuizData();
   await quizStore.loadQuestions(quizSetup)
 
   if (isError.value === false) {
@@ -29,7 +27,7 @@ const createQuiz = async (quizSetup: ApiSetup): Promise<void> => {
   <h1>Welcome to Trivia quiz</h1>
   <p>This Quiz is made with: <a href="https://opentdb.com/api_config.php" target="_blank">Trivia API</a>.</p>
   <p>Repository for this app: <a href="https://github.com/mikizuk/vue3-trivia" target="_blank">vue3-trivia</a></p>
-  <div v-if="!isActualQuizCreated || (isActualQuizCreated && isActualQuizFinished)">
+  <div class="quiz-creator-wrapper" v-if="!isActualQuizCreated || (isActualQuizCreated && isActualQuizFinished)">
     <QuizCreator @createQuiz="createQuiz" />
   </div>
   <div v-else>
@@ -38,3 +36,21 @@ const createQuiz = async (quizSetup: ApiSetup): Promise<void> => {
   <div v-if="isLoading">Loading....</div>
   <div class="error" v-if="isError">Error has occured: {{ showErrorText }}. Please try again a in few seconds.</div>
 </template>
+
+<style scoped>
+.quiz-creator-wrapper {
+  padding-block: 1rem;
+}
+
+@media (min-width: 768px) {
+  .quiz-creator-wrapper {
+    padding-block: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .quiz-creator-wrapper {
+    padding-block: 3rem;
+  }
+}
+</style>

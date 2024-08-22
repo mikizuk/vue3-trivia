@@ -6,12 +6,11 @@ import { useQuizStore } from '@/stores/quiz';
 
 const quizStore = useQuizStore()
 const isActualQuizCreated = computed(() => quizStore.isActualQuizCreated)
-// const isActualQuizFinished = computed(() => quizStore.isActualQuizFinished)
 </script>
 
 <template>
   <h1>Quiz page</h1>
-  <div class="actual-quiz" v-if="isActualQuizCreated">
+  <div class="quiz-component-wrapper" v-if="isActualQuizCreated">
     <QuizComponent />
   </div>
   <div v-else>
@@ -20,9 +19,22 @@ const isActualQuizCreated = computed(() => quizStore.isActualQuizCreated)
 </template>
 
 <style>
-.actual-quiz {
+.quiz-component-wrapper {
   display: flex;
   flex-direction: column;
   height: 100%;
+  padding-block: 1rem;
+}
+
+@media (min-width: 768px) {
+  .quiz-component-wrapper {
+    padding-block: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .quiz-component-wrapper {
+    padding-block: 3rem;
+  }
 }
 </style>

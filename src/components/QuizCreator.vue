@@ -18,8 +18,8 @@ const isButtonDisabled = computed(() => {
 </script>
 
 <template>
-  <form @submit.prevent="emit('createQuiz', qSetup)" class="quiz-creator">
-    <h2>Please create you quiz:</h2>
+  <h2>Please create you quiz:</h2>
+  <form @submit.prevent="emit('createQuiz', qSetup)">
     <div class="form-grid">
       <label class="form-label" for="form-questions">Number of questions: *</label>
       <input class="form-input" name="form-questions" id="form-questions" v-model.number="qSetup.numberOfQuestions"
@@ -63,20 +63,24 @@ const isButtonDisabled = computed(() => {
   </div>
 </template>
 
-<style>
-.quiz-creator {
-  padding-block: 1rem;
-}
-
+<style scoped>
 .form-grid {
   display: grid;
-  grid-template-columns: 1fr 170px;
-  gap: 8px;
-  margin-block: 1rem;
+  grid-template-columns: 1fr 180px;
+  gap: 10px;
+  padding-bottom: 1rem;
+}
+
+.form-label {
+  font-size: .9rem;
+}
+
+.form-input {
+  font-size: 1rem;
 }
 
 .form-info {
-  font-size: small;
+  font-size: .7rem;
   grid-column: 1 / 3;
 }
 </style>

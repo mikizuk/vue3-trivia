@@ -7,8 +7,8 @@ import { RouterLink, RouterView } from 'vue-router'
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="75" height="125" />
 
     <div class="header__nav">
-      <h1 class="header__title">Trivia Quiz Game</h1>
       <nav>
+        <span class="header__title">Quiz Game</span>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/quiz">Quiz</RouterLink>
         <RouterLink to="/summary">Summary</RouterLink>
@@ -23,9 +23,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <style scoped>
 header {
-  /* padding: 1rem; */
-  line-height: 1.5;
-  /* max-height: 100vh; */
+  line-height: 1;
 }
 
 .header__nav {
@@ -37,7 +35,6 @@ header {
 
 .header__title {
   text-align: center;
-  font-size: 2rem;
   font-weight: 600;
   width: 100%;
 }
@@ -51,6 +48,7 @@ nav {
   width: 100%;
   font-size: 1rem;
   text-align: center;
+  padding-bottom: 1rem;
 }
 
 nav a.router-link-exact-active {
@@ -60,6 +58,11 @@ nav a.router-link-exact-active {
 
 nav a.router-link-exact-active:hover {
   background-color: transparent;
+}
+
+nav span {
+  border-right: 1px solid var(--color-border);
+  padding-right: 1rem;
 }
 
 nav a {
@@ -76,22 +79,28 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* margin-block: 5px; */
-  padding-block: 10px;
-  /* padding: calc(var(--section-gap) / 8); */
   height: 100%;
-
 }
 
 @media (min-width: 768px) {
+  nav {
+    font-size: 1.6rem;
+    padding-bottom: 2rem;
+  }
+
   .logo {
     display: block;
   }
 }
 
 @media (min-width: 1024px) {
+  nav {
+    font-size: 1.8rem;
+    padding-bottom: .6rem;
+  }
 
   header {
+    line-height: 1.5;
     display: flex;
     place-items: center;
     padding-inline: calc(var(--section-gap) / 2);
@@ -112,15 +121,8 @@ main {
     width: 100%;
   }
 
-
-  main {
-    padding-inline: calc(var(--section-gap) / 2);
-  }
-
   .logo {
     margin: 0 1rem;
   }
-
-
 }
 </style>

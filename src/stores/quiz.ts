@@ -25,7 +25,7 @@ import type {
 } from "@/types/types";
 
 const initialQuizSetup: ApiSetup = {
-  numberOfQuestions: 3,
+  numberOfQuestions: 5,
   selectedCategoryValue: 0,
   selectedDifficultyValue: "any",
   selectedTypeValue: "any",

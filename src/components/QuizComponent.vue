@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-// import { storeToRefs } from 'pinia'
 import { useQuizStore } from '@/stores/quiz';
 import { useRouter } from 'vue-router'
 import { convertString } from '@/utils/stringUtils'
@@ -42,52 +41,42 @@ const resetQuizClick = () => {
 }
 const finishQuizClick = () => {
   quizStore.finishQuiz()
-  // router.push('/summary')
 }
 
 </script>
 <template>
-  <div class="quiz-component">
-    <div v-if="currentQuestion" class="quiz-question">
-      <div class="quiz-info">
-        <div>
-          <label for="progress-bar">Answered questions:</label>
-          <progress class="progress-bar" id="progress-bar" :max="quizQuestions.length"
-            :value="numberOfSelectedAnswers"></progress>
-        </div>
-        <p>Question: {{ currentIndex + 1 }}/{{ quizQuestions.length }}</p>
-      </div>
-      <Transition :name="transitionName">
-        <div :key="currentQuestion.id" class="quiz-question-item">
-          <div style="display: flex; justify-content: space-around;">
-            <p><span style="font-size: small;">Difficulty:</span> {{ currentQuestion.difficulty }}</p>
-            <p><span style="font-size: small;">Category:</span> {{ convertString(currentQuestion.category) }}</p>
-          </div>
-          <strong style="padding-block: .5rem; t: 600;">{{ convertString(currentQuestion.question) }}</strong>
-          <!-- style="padding-block: 1rem; font-weight: 600;" -->
-          <ul style="padding: 0; margin-inline: 1rem;">
-            <li class="quiz-answer" v-for="answer of currentQuestion.randomAnswers" :key="answer"
-              @click="selectAnswerClick(answer)" :class="{
-                'quiz-answer--selected': currentQuestion.selectedAnswer === answer,
-                'quiz-answer--correct': isActualQuizFinished && currentQuestion.correctAnswer === answer,
-                'quiz-answer--incorrect': isActualQuizFinished && currentQuestion.incorrectAnswers.find(a => a === answer)
-              }">
-              <span>{{ convertString(answer) }}</span>
-            </li>
-          </ul>
-        </div>
-      </Transition>
+  <div v-if="currentQuestion" class="quiz">
+    <div class="quiz__info">
+      <label for="progress-bar">Answered questions:</label>
+      <progress class="quiz__progress-bar" id="progress-bar" :max="quizQuestions.length"
+        :value="numberOfSelectedAnswers"></progress>
+      <p>Question: {{ currentIndex + 1 }}/{{ quizQuestions.length }}</p>
     </div>
+    <Transition :name="transitionName">
+      <div :key="currentQuestion.id" class="quiz__question">
+        <div class="quiz__question-info">
+          <p>Difficulty: {{ currentQuestion.difficulty }}</p>
+          <p>Category: {{ convertString(currentQuestion.category) }}</p>
+        </div>
+        <strong class="quiz__question-text">{{ convertString(currentQuestion.question)
+          }}</strong>
+        <ul class="quiz__answer-list">
+          <li class="quiz__answer-item" v-for="answer of currentQuestion.randomAnswers" :key="answer"
+            @click="selectAnswerClick(answer)" :class="{
+              'quiz__answer--selected': currentQuestion.selectedAnswer === answer,
+              'quiz__answer--correct': isActualQuizFinished && currentQuestion.correctAnswer === answer,
+              'quiz__answer--incorrect': isActualQuizFinished && currentQuestion.incorrectAnswers.find(a => a === answer)
+            }">
+            <span>{{ convertString(answer) }}</span>
+          </li>
+        </ul>
+      </div>
+    </Transition>
   </div>
-  <div class="quiz-status">
+  <div class="quiz__status">
     <div v-if="isActualQuizFinished">
       <p>You finished the quiz! Cool! Check your statistics in <RouterLink to="/summary">Summary page</RouterLink>.
       </p>
-      <!-- <div style="display: flex; justify-content: space-around;">
-        <p class="quiz-answer quiz-answer--selected quiz-answer--hint">Selected answer</p>
-        <p class="quiz-answer quiz-answer--selected quiz-answer--correct quiz-answer--hint">Correct answer!!</p>
-        <p class="quiz-answer quiz-answer--selected quiz-answer--incorrect quiz-answer--hint">Incorrect answer</p>
-      </div> -->
     </div>
   </div>
   <div class="button-wrapper">
@@ -100,85 +89,90 @@ const finishQuizClick = () => {
 </template>
 
 <style>
-.quiz-component {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-}
-
-.progress-bar {
-  margin-left: 4px;
-  border-radius: 7px;
-  height: 12px;
-  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
-}
-
-.progress-bar::-webkit-progress-bar {
-  background-color: var(--color-text);
-  border-radius: 7px;
-}
-
-.progress-bar::-webkit-progress-value {
-  background-color: var(--color-progress-bar);
-  border-radius: 7px;
-}
-
-.progress-bar::-moz-progress-bar {
-  border-radius: 7px;
-}
-
-.quiz-question {
+.quiz {
   text-align: center;
   overflow: hidden;
-  /* max-width: 400px; */
   width: 100%;
-  /* min-height: 55vh; */
   min-height: 380px;
   height: 100%;
   position: relative;
-  /* border: 1px solid blue; */
 }
 
-.quiz-question-item {
+.quiz__info {
+  text-align: center;
+  padding-bottom: .5rem;
+}
+
+.quiz__progress-bar {
+  margin-left: 10px;
+  border-radius: 10px;
+  height: 15px;
+  box-shadow: var(--color-progress-bar-shadow);
+  transition: 0.4s;
+}
+
+.quiz__progress-bar::-webkit-progress-bar {
+  background-color: var(--color-text);
+  border-radius: 7px;
+  transition: 0.4s;
+}
+
+.quiz__progress-bar::-webkit-progress-value {
+  background-color: var(--color-progress-bar);
+  border-radius: 7px;
+  transition: 0.4s;
+}
+
+.quiz__progress-bar::-moz-progress-bar {
+  border-radius: 7px;
+  transition: 0.4s;
+}
+
+.quiz__question {
   display: flex;
-  /* align-items: center; */
-  /* justify-content: center; */
   flex-direction: column;
   width: 100%;
   height: 100%;
-  /* white-space: nowrap; */
   position: absolute;
-  /* border: 1px solid red; */
-  /* top: 60%; */
 }
 
-.quiz-answer {
+.quiz__question-info {
+  display: flex;
+  justify-content: space-around;
+  font-size: small;
+}
+
+.quiz__question-text {
+  text-align: justify;
+  padding-block: .5rem;
+  font-weight: 600;
+}
+
+.quiz__answer-list {
+  padding: 0;
+  display: grid;
+  gap: .8rem;
+  flex-direction: column;
+}
+
+.quiz__answer-item {
   list-style: none;
-  border: 2px solid lightgrey;
+  border: 2px solid var(--color-notselected-option-border);
   border-radius: 10px;
-  margin-block: .8rem;
   cursor: pointer;
-  /* max-width: 400px; */
+  padding-block: .1rem;
+  min-width: 324px;
 }
 
-.quiz-answer--hint {
-  font-size: .8rem;
-  text-align: center;
-  /* width: 150px; */
-  padding-inline: 8px;
-  /* margin-block: 5px; */
-}
-
-.quiz-answer--selected {
+.quiz__answer--selected {
   border: 2px solid var(--color-selected-option-border);
 }
 
-.quiz-answer--correct {
+.quiz__answer--correct {
   background-color: var(--color-correct-option-background);
 }
 
-.quiz-answer--incorrect {
+.quiz__answer--incorrect {
   background-color: var(--color-incorrect-option-background);
 }
 
@@ -208,5 +202,15 @@ const finishQuizClick = () => {
 
 .slide-left-leave-to {
   transform: translateX(100%);
+}
+
+.quiz__status {
+  padding-block: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .quiz__question-info {
+    font-size: 1rem;
+  }
 }
 </style>
